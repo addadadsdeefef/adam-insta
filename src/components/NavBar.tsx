@@ -1,4 +1,4 @@
-"use client"; // Marking as Client Component
+"use client";
 
 import * as React from 'react';
 import { BottomNavigation, BottomNavigationAction } from '@mui/material';
@@ -29,10 +29,10 @@ const NavBar = () => {
         router.push('/'); // Home page
         break;
       case 1:
-        router.push('/profil'); // Profile page
+        router.push('/prispevok'); // Posts page
         break;
       case 2:
-        router.push('/prispevok'); // Posts page
+        router.push('/profil'); // Profile page
         break;
       case 3:
         router.push('/auth/prihlasenie'); // Login page
@@ -52,55 +52,55 @@ const NavBar = () => {
       showLabels
       sx={{ position: 'fixed', bottom: 0, width: '100%' }}
     >
-      {/* Home button */}
-      <BottomNavigationAction label="Domov" icon={<HomeIcon />} />
-
-      {/* Posts button */}
-      <BottomNavigationAction label="Príspevky" icon={<AddCircleIcon />} />
-
-      {/* Display Profiles only if user is logged in */}
-      {session && (
-        <BottomNavigationAction label="Profily" icon={<PeopleIcon />} />
-      )}
-
-      {/* Display user profile picture if logged in */}
-      {session && (
-        <BottomNavigationAction
-          label="Profil"
-          icon={
-            <Image
-              src={session.user?.image || '/default-avatar.png'}
-              alt="Profil"
-              width={24}
-              height={24}
-              style={{ borderRadius: '50%' }}
-            />
-          }
-        />
-      )}
-
-      {/* Show Logout button if user is logged in */}
-      {session ? (
-        <BottomNavigationAction
-          label="Odhlásiť"
-          icon={<LogoutIcon />}
-          onClick={handleLogout}
-        />
-      ) : (
-        <>
-          {/* Show Login and Registration buttons if user is not logged in */}
-          <BottomNavigationAction
-            label="Prihlásenie"
-            icon={<LoginIcon />}
-            onClick={() => router.push('/auth/prihlasenie')}
-          />
-          <BottomNavigationAction
-            label="Registrácia"
-            icon={<HowToRegIcon />}
-            onClick={() => router.push('/auth/registracia')}
-          />
-        </>
-      )}
+      {[
+        // Home button
+        <BottomNavigationAction key="home" label="Domov" icon={<HomeIcon />} />,
+        // Posts button
+        <BottomNavigationAction key="posts" label="Príspevky" icon={<AddCircleIcon />} />,
+        // Conditional rendering based on session
+        ...(session
+          ? [
+              // Profiles button
+              <BottomNavigationAction key="profiles" label="Profily" icon={<PeopleIcon />} />,
+              // Profile button with user image
+              <BottomNavigationAction
+                key="profile"
+                label="Profil"
+                icon={
+                  <Image
+                    src={session.user?.image || '/default-avatar.png'}
+                    alt="Profil"
+                    width={24}
+                    height={24}
+                    style={{ borderRadius: '50%' }}
+                  />
+                }
+              />,
+              // Logout button
+              <BottomNavigationAction
+                key="logout"
+                label="Odhlásiť"
+                icon={<LogoutIcon />}
+                onClick={handleLogout}
+              />,
+            ]
+          : [
+              // Login button
+              <BottomNavigationAction
+                key="login"
+                label="Prihlásenie"
+                icon={<LoginIcon />}
+                onClick={() => router.push('/auth/prihlasenie')}
+              />,
+              // Registration button
+              <BottomNavigationAction
+                key="register"
+                label="Registrácia"
+                icon={<HowToRegIcon />}
+                onClick={() => router.push('/auth/registracia')}
+              />,
+            ]),
+      ]}
     </BottomNavigation>
   );
 };
