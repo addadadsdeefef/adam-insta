@@ -11,7 +11,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import InfoIcon from '@mui/icons-material/Info'; // Icon for "O nás"
 import { useRouter } from 'next/navigation';
 import { useSession, signOut } from "next-auth/react";
-import Image from "next/image";
+import Avatar from '@mui/material/Avatar';
 
 const NavBar = () => {
   const [value, setValue] = React.useState(0);
@@ -53,12 +53,10 @@ const NavBar = () => {
           key="profile"
           label="Profil"
           icon={
-            <Image
+            <Avatar
               src={session.user?.image || '/default-avatar.png'}
               alt="Profil"
-              width={24}
-              height={24}
-              style={{ borderRadius: '50%' }}
+              sx={{ width: 24, height: 24 }}
             />
           }
         />,

@@ -1,21 +1,22 @@
-// src/app/private/layout.tsx
+"use client";
 
-import { useSession } from "next-auth/react"; // Používame useSession pre kontrolu prihlásenia na klientskej strane
-import { redirect } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import Container from "@mui/material/Container";
+import { useEffect } from "react";
 
-export const metadata = { title: "Private | SnapZoška" };
+export default function PrivateLayout({ children }: { children: React.ReactNode }) {
+  const { status } = useSession();  // Používame len status
+  const router = useRouter();
 
-export default function PrivateLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const { data: session } = useSession(); // Na klientskej strane získame session
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/auth/prihlasenie");
+    }
+  }, [status, router]);
 
-  // Ak používateľ nie je prihlásený, presmerujeme ho na prihlasovaciu stránku
-  if (!session) {
-    redirect("/auth/prihlasenie");
+  if (status === "loading") {
+    return <p>Načítava sa...</p>;
   }
 
   return <Container>{children}</Container>;
